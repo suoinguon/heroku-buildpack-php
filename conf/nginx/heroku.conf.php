@@ -63,6 +63,17 @@ http {
         location ~ /\. {
             deny all;
         }
+
+        location / {
+            # try to serve file directly, fallback to rewrite
+            try_files $uri @rewriteapp;
+        }
+
+        location @rewriteapp {
+            # rewrite all to app.php
+            rewrite ^(.*)$ /index.html/$1 last;
+        }
+
         
         # default handling of .php
         location ~ \.php {
